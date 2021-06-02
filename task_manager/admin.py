@@ -13,3 +13,13 @@ class TaskAdmin(admin.ModelAdmin):
         'updated_at',
         'updated_by',
     )
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    model = Comment
+    list_display = (
+        'task',
+        'user',
+        'commented_at',
+    )

@@ -1,0 +1,1 @@
+web: gunicorn taskManager_proj.wsgi --log-file -

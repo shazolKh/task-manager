@@ -40,43 +40,6 @@
 
 <!-- Preloader Start -->
 <div class="se-pre-con"></div>
-{% if request.user.is_authenticated %}
-    <header id="home">
-        <nav class="navbar navbar-fixed bootsnav">
-
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <a class="navbar-brand" href="{% url 'index' %}">
-                        <img src="{% static 'assets/img/logo.png' %}" class="logo logo-scrolled" alt="Logo">
-                    </a>
-                </div>
-                <!-- End Header Navigation -->
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="navbar-menu">
-                    <ul class="nav navbar-nav navbar-right" data-in="#" data-out="#">
-                        <li>
-                            <a class="smooth-menu" href="#services">Services</a>
-                        </li>
-                        <li>
-                            <a class="smooth-menu" href="#pricing">Pricing</a>
-                        </li>
-                        <li>
-                            <a class="smooth-menu" href="{% url 'dashboard' %}">Dashboard</a>
-                        </li>
-                        <li>
-                            <a class="smooth-menu" href="{% url 'logout' %}">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-    </header>
-{% else %}
     <header id="home">
         <nav class="navbar navbar-default navbar-fixed white no-background bootsnav">
 
@@ -85,9 +48,9 @@
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <a class="navbar-brand" href="{% url 'index' %}">
-                        <img src="{% static 'assets/img/logo-light.png' %}" class="logo logo-display" alt="Logo">
-                        <img src="{% static 'assets/img/logo.png' %}" class="logo logo-scrolled" alt="Logo">
+                    <a class="navbar-brand" href="{% url 'index' %}" style="margin-top: 15px">
+                        <strong class="logo logo-display" style="color: white">TASK MANAGER</strong>
+                        <strong class="logo logo-scrolled" style="color: red">TASK MANAGER</strong>
                     </a>
                 </div>
                 <!-- End Header Navigation -->
@@ -95,12 +58,6 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbar-menu">
                     <ul class="nav navbar-nav navbar-right" data-in="#" data-out="#">
-                        <li>
-                            <a class="smooth-menu" href="#services">Services</a>
-                        </li>
-                        <li>
-                            <a class="smooth-menu" href="#pricing">Pricing</a>
-                        </li>
                         <li>
                             <a class="smooth-menu" href="{% url 'login' %}">Login</a>
                         </li>
@@ -111,9 +68,7 @@
                 </div>
             </div>
         </nav>
-
     </header>
-{% endif %}
 
 <!-- End Header -->
 
