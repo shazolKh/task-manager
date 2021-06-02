@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>Task Manager | Register</title>
+{% endblock %}
+{% block content %}
+    <div class="banner-area inc-form top-50 inc-shape bg-dark" style="height: auto; padding-bottom: 20px">
+        <!-- Shape -->
+        <div class="shape">
+            <img src="{% static 'assets/img/shape/2.png' %}" alt="thumb">
+        </div>
+        <div id="particles-js"></div>
+        <!-- Shape -->
+        <div class="container" style="margin-top: 40px">
+            <div class="row">
+                <div class="double-items text-light">
+                    <!-- Start Banner Form -->
+                    <div class="form col-md-5 col-sm-7">
+                        <div class="form-info">
+                            {% for message in messages %}
+                                <p class="text-center">{{ message }}</p>
+                            {% endfor %}
+                            <h3>Sign Up</h3>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <input class="form-control" name="username" placeholder="Username*"
+                                                   type="text" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <input class="form-control" name="name" placeholder="Name*" type="text"
+                                                   required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <input class="form-control" name="email" placeholder="Email*" type="email"
+                                                   required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <input class="form-control" name="password1" placeholder="Password*"
+                                                   type="password" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" name="password2" placeholder="Confirm Password*"
+                                                   type="password" required>
+                                        </div>
+                                        <div id="emailHelp" class="form-text" style="color: whitesmoke">
+                                            Password can’t be too similar to your other personal information,
+                                            must contain at least 8 characters, can’t be a commonly used password and
+                                            can’t be entirely numeric.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <button type="submit">
+                                            Sign Up
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="thumb col-md-6 col-sm-5 col-md-offset-1">
+                        <img src="{% static 'assets/img/illustrations/1.png' %}" alt="thumb">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

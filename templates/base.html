@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ========== Meta Tags ========== -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gostart - Startup Landing Page Template">
+
+    <!-- ========== Page Title ========== -->
+    {% block title %} {% endblock %}
+
+    <!-- ========== Favicon Icon ========== -->
+    <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+
+    <!-- ========== Start Stylesheet ========== -->
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/font-awesome.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/themify-icons.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/flaticon-set.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/magnific-popup.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/owl.carousel.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/owl.theme.default.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/animate.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/bootsnav.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/responsive.css' %}" rel="stylesheet"/>
+    <!-- ========== End Stylesheet ========== -->
+
+
+    <!-- ========== Google Fonts ========== -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- Preloader Start -->
+<div class="se-pre-con"></div>
+{% if request.user.is_authenticated %}
+    <header id="home">
+        <nav class="navbar navbar-fixed bootsnav">
+
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                        <img src="{% static 'assets/img/logo.png' %}" class="logo logo-scrolled" alt="Logo">
+                    </a>
+                </div>
+                <!-- End Header Navigation -->
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right" data-in="#" data-out="#">
+                        <li>
+                            <a class="smooth-menu" href="#services">Services</a>
+                        </li>
+                        <li>
+                            <a class="smooth-menu" href="#pricing">Pricing</a>
+                        </li>
+                        <li>
+                            <a class="smooth-menu" href="{% url 'dashboard' %}">Dashboard</a>
+                        </li>
+                        <li>
+                            <a class="smooth-menu" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+{% else %}
+    <header id="home">
+        <nav class="navbar navbar-default navbar-fixed white no-background bootsnav">
+
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                        <img src="{% static 'assets/img/logo-light.png' %}" class="logo logo-display" alt="Logo">
+                        <img src="{% static 'assets/img/logo.png' %}" class="logo logo-scrolled" alt="Logo">
+                    </a>
+                </div>
+                <!-- End Header Navigation -->
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right" data-in="#" data-out="#">
+                        <li>
+                            <a class="smooth-menu" href="#services">Services</a>
+                        </li>
+                        <li>
+                            <a class="smooth-menu" href="#pricing">Pricing</a>
+                        </li>
+                        <li>
+                            <a class="smooth-menu" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li>
+                            <a class="smooth-menu" href="{% url 'register' %}">Register</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+{% endif %}
+
+<!-- End Header -->
+
+<!-- Start Banner-->
+{% block content %} {% endblock %}
+<!-- End Banner -->
+<!-- Start Footer -->
+<footer>
+    <!-- Start Footer Bottom -->
+    <div class="footer-bottom bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; Copyright {% now "Y" %}. All Rights Reserved by <a href="#">Cypher</a></p>
+                </div>
+                <div class="col-md-6 text-right link">
+                    <ul>
+                        <li>
+                            <a href="#">Terms</a>
+                        </li>
+                        <li>
+                            <a href="#">Privacy</a>
+                        </li>
+                        <li>
+                            <a href="#">Support</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Footer Bottom -->
+</footer>
+<!-- End Footer -->
+
+<!-- jQuery Frameworks
+============================================= -->
+<script src="{% static 'assets/js/jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/equal-height.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.appear.js' %}"></script>
+<script src="{% static 'assets/js/jquery.easing.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'assets/js/modernizr.custom.13711.js' %}"></script>
+<script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'assets/js/wow.min.js' %}"></script>
+<script src="{% static 'assets/js/progress-bar.min.js' %}"></script>
+<script src="{% static 'assets/js/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'assets/js/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'assets/js/count-to.js' %}"></script>
+<script src="{% static 'assets/js/YTPlayer.min.js' %}"></script>
+<script src="{% static 'assets/js/circle-progress.js' %}"></script>
+<script src="{% static 'assets/js/particles.min.js' %}"></script>
+<script src="{% static 'assets/js/bootsnav.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+</html>

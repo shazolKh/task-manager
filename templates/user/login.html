@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>Task Manager | Login</title>
+{% endblock %}
+{% block content %}
+    <div class="banner-area inc-form top-50 inc-shape bg-dark" style="height: auto; padding-bottom: 20px">
+        <!-- Shape -->
+        <div class="shape">
+            <img src="{% static 'assets/img/shape/2.png' %}" alt="thumb">
+        </div>
+        <div id="particles-js"></div>
+        <!-- Shape -->
+        <div class="container">
+            <div class="row">
+                <div class="double-items text-light">
+                    <!-- Start Banner Form -->
+                    <div class="form col-md-5 col-sm-7">
+                        <div class="form-info">
+                            {% for message in messages %}
+                                <p class="text-center">{{ message }}</p>
+                            {% endfor %}
+                            <h3>Sign In</h3>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <input class="form-control" name="username" placeholder="Username*" type="text" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <input class="form-control" name="password" placeholder="Password*" type="password" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <button type="submit">
+                                            Sign In
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="thumb col-md-6 col-sm-5 col-md-offset-1">
+                        <img src="{% static 'assets/img/illustrations/1.png' %}" alt="thumb">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
