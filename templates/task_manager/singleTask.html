@@ -10,7 +10,7 @@
                 <div class="card border-left-info shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h4 class="m-0 font-weight-bold text-primary">{{ data.task_name }}</h4>
+                        <h4 class="m-0 font-weight-bold text-primary">{{ data.task_name|title }}</h4>
                         <div class="dropdown no-arrow">
                             {% if data.status == 'pending' %}
                                 {% if approval != 0 %}
@@ -21,6 +21,8 @@
                                                 Approve
                                             </a>
                                         {% endif %}
+                                        {% else %}
+                                        <button type="button" class="btn btn-sm btn-primary" disabled>Requested</button>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
@@ -32,7 +34,7 @@
                                data-target="#deletetaskmodal">
                                 Delete
                             </a>
-                            <a href="#" class="btn btn-info btn-sm btn-success" data-toggle="modal"
+                            <a href="#" class="btn btn-sm btn-success" data-toggle="modal"
                                data-target="#addcommentmodal">
                                 Add Comment
                             </a>

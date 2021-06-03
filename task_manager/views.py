@@ -118,6 +118,25 @@ def AddTask(request):
     return redirect('dashboard')
 
 
+@login_required(login_url='login')
+def Summary(request):
+    task_list = Task.objects.order_by('-id').all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(task_list, 20)
+
+    try:
+        tasks = paginator.page(page)
+    except PageNotAnInteger:
+        tasks = paginator.page(1)
+    except EmptyPage:
+        tasks = paginator.page(paginator.num_pages)
+
+    context = {
+        'tasks': tasks,
+    }
+    return render(request, 'task_manager/summary.html', context)
+
+
 def Additional(request, pk):
     print(pk)
     return JsonResponse({'data': pk})
