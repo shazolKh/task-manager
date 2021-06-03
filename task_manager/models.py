@@ -12,6 +12,7 @@ class Task(models.Model):
         ('incomplete', 'Incomplete'),
         ('outstanding', 'Outstanding'),
         ('no_status', 'No Status'),
+        ('pending', 'Pending'),
     )
     status = models.CharField(max_length=255, choices=STATUS_TYPE, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now_add=False, null=True, blank=True)
@@ -30,3 +31,10 @@ class Comment(models.Model):
 
     # def __str__(self):
     #     return f'Commented on {self.task.task_name} by {self.user}'
+
+
+class ApprovalRequest(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=255, null=True, blank=True)
+    approved = models.BooleanField(default=False)

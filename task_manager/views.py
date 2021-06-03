@@ -31,6 +31,10 @@ def Dashboard(request):
 @login_required(login_url='login')
 def SingleTask(request, pk):
     data = Task.objects.get(id=pk)
+    try:
+        approval = ApprovalRequest.objects.filter(task_id=pk).first()
+    except:
+        approval = 0
 
     commen = Comment.objects.filter(task_id=pk)
     page = request.GET.get('page', 1)
@@ -49,15 +53,26 @@ def SingleTask(request, pk):
         updated_at = datetime.now()
         updated_by = request.user
 
-        Task.objects.filter(id=pk).update(status=status, additional_info=additional_info, updated_by=updated_by,
-                                          updated_at=updated_at)
+        Task.objects.filter(id=pk).update(
+            status='pending',
+            additional_info=additional_info,
+            updated_by=updated_by,
+            updated_at=updated_at
+        )
 
-        messages.success(request, 'Information updated successfully.')
+        ApprovalRequest.objects.create(
+            task_id=pk,
+            user_id=request.user.pk,
+            status=status,
+        )
+
+        messages.success(request, 'Request Submitted, Please wait for approval!!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     context = {
         'data': data,
         'comments': comments,
+        'approval': approval,
     }
     return render(request, 'task_manager/singleTask.html', context)
 
@@ -77,6 +92,18 @@ def AddComment(request, pk):
         details=request.POST.get('comment')
     )
     messages.success(request, 'Your Comment Added to this task')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required(login_url='login')
+def Approve(request, pk):
+    status = ApprovalRequest.objects.values('status').filter(task_id=pk).first()
+    stat = status.get('status')
+    Task.objects.filter(id=pk).update(
+        status=stat
+    )
+    ApprovalRequest.objects.filter(task_id=pk).delete()
+    messages.success(request, 'Task Status Request has been Approved!!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

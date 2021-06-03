@@ -23,3 +23,14 @@ class CommentAdmin(admin.ModelAdmin):
         'user',
         'commented_at',
     )
+
+
+@admin.register(ApprovalRequest)
+class ApprovalRequestAdmin(admin.ModelAdmin):
+    model = ApprovalRequest
+    list_display = (
+        'task',
+        'user',
+        'approved',
+        'status',
+    )

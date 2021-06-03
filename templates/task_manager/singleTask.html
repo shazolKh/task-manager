@@ -13,6 +13,18 @@
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h4 class="m-0 font-weight-bold text-primary">{{ data.task_name }}</h4>
                         <div class="dropdown no-arrow">
+                            {% if data.status == 'pending' %}
+                                {% if approval != 0 %}
+                                    {% if approval.user != request.user %}
+                                        {% if approval.approved == False %}
+                                            <a href="{% url 'approve' data.id %}"
+                                               class="btn btn-info btn-sm btn-success">
+                                                Approve
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <a href="#" class="btn btn-info btn-sm btn-warning" data-toggle="modal"
                                data-target="#edittaskmodal">
                                 Edit
@@ -41,6 +53,8 @@
                                     <i class="fas fa-exclamation-triangle fa-2x" style="color: yellow"></i>
                                 {% elif data.status == 'no_status' %}
                                     <i class="fas fa-power-off fa-2x"></i>
+                                {% elif data.status == 'pending' %}
+                                    <i class="far fa-clock fa-2x" style="color: #4f1915"></i>
                                 {% endif %}
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -140,7 +154,7 @@
         </div>
     </div>
 
-{#    Edit Modal start ============#}
+    {#    Edit Modal start ============#}
     <div class="modal fade" id="edittaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -178,7 +192,7 @@
             </div>
         </div>
     </div>
-{#    Edit Modal end ===========#}
+    {#    Edit Modal end ===========#}
 
     {#    Delete modal#}
     <div class="modal fade" id="deletetaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
