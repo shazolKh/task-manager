@@ -107,6 +107,17 @@ def Approve(request, pk):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required(login_url='login')
+def AddTask(request):
+    if request.method == 'POST':
+        Task.objects.create(
+            task_name=request.POST.get('name'),
+            status=request.POST.get('status'),
+            additional_info=request.POST.get('additional')
+        )
+    return redirect('dashboard')
+
+
 def Additional(request, pk):
     print(pk)
     return JsonResponse({'data': pk})
