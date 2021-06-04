@@ -2,82 +2,116 @@
 {% load static %}
 {% block dasboard_content %}
     <div class="container-fluid">
-        {% comment %}<a href="#" class="btn btn-success btn-icon-split" onclick="generate()">
-            <span class="icon text-white-50">
-                <i class="fas fa-book-open"></i>
-            </span>
-            <span class="text">Generate Report</span>
-        </a>{% endcomment %}
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        </div>
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Tasks Summary</h6>
+        {% if perms.task_manager.view_task %}
+            <div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Task Summary</li>
+                </ol>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered text-center" id="example">
-                        <thead>
-                        <tr>
-                            <th>SL.</th>
-                            <th>Task Name</th>
-                            <th>Status</th>
-                            <th>Completed By</th>
-                            <th>Updated at</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for task in tasks %}
+            <div class="card border-left-info shadow mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center" id="example1">
+                            <thead>
                             <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ task.task_name | title }}</td>
-                                <td>{{ task.get_status_display }}</td>
-                                <td>{{ task.updated_by.first_name|title }}</td>
-                                <td>{{ task.updated_at }}</td>
+                                <th>SL.</th>
+                                <th>Task Name</th>
+                                <th>Status</th>
+                                <th>Completed By</th>
+                                <th>Updated at</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% if tasks.has_other_pages %}
-                    <nav style="float: right">
-                        <ul class="pagination">
-                            {% if tasks.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ tasks.previous_page_number }}"
-                                       tabindex="-1">Previous</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <span class="page-link" tabindex="-1">Previous</span>
-                                </li>
-                            {% endif %}
-                            {% for i in tasks.paginator.page_range %}
-                                {% if tasks.number == i %}
-                                    <li class="page-item active">
-                                        <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+                            </thead>
+                            <tbody>
+                            {% for task in tasks %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ task.task_name | title }}</td>
+                                    <td>{{ task.get_status_display }}</td>
+                                    <td>{{ task.updated_by.first_name|title }}</td>
+                                    <td>{{ task.updated_at }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if tasks.has_other_pages %}
+                        <nav style="float: right">
+                            <ul class="pagination">
+                                {% if tasks.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ tasks.previous_page_number }}"
+                                           tabindex="-1">Previous</a>
                                     </li>
                                 {% else %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    <li class="page-item disabled">
+                                        <span class="page-link" tabindex="-1">Previous</span>
                                     </li>
                                 {% endif %}
-                            {% endfor %}
-                            {% if tasks.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ tasks.next_page_number }}">Next</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <span class="page-link">Next</span>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}
+                                {% for i in tasks.paginator.page_range %}
+                                    {% if tasks.number == i %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ i }} <span
+                                                    class="sr-only">(current)</span></span>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if tasks.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ tasks.next_page_number }}">Next</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Next</span>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-    </div>
+        {% else %}
+            <div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">You Don't Have Access to this Page</li>
+                </ol>
+            </div>
+        {% endif %}
 
-    {#  Modal for showing additional data of a  perticular task      #}
+    </div>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dash/data/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dash/data/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dash/data/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'dash/data/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'dash/data/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dash/data/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'dash/data/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dash/data/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'dash/data/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'dash/data/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'dash/data/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'dash/data/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'dash/data/datatables-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'dash/data/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["pdf"],
+                "paging": false,
+                "ordering": false,
+                "info": false
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
 {% endblock %}

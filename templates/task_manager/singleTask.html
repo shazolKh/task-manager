@@ -2,35 +2,48 @@
 
 {% block dasboard_content %}
     <div class="container-fluid">
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        </div>
         <div class="row">
-            <!-- Area Chart -->
             <div class="col-xl-10 col-lg-10">
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active">{{ data.task_name|title }}</li>
+                    </ol>
+                </div>
                 <div class="card border-left-info shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h4 class="m-0 font-weight-bold text-primary">{{ data.task_name|title }}</h4>
+                        <h5 class="m-0 font-weight-bold text-primary">{{ data.task_name|title }}</h5>
                         <div class="dropdown no-arrow">
                             {% if data.status == 'pending' %}
                                 {% if approval != 0 %}
                                     {% if approval.user != request.user %}
                                         {% if approval.approved == False %}
-                                            <a href="{% url 'approve' data.id %}"
-                                               class="btn btn-info btn-sm btn-success">
-                                                Approve
-                                            </a>
+                                            {% if perms.task_manager.view_approvalrequest %}
+                                                <a href="{% url 'approve' data.id %}"
+                                                   class="btn btn-info btn-sm btn-success">
+                                                    Approve
+                                                </a>
+                                            {% else %}
+                                                <button type="button"
+                                                        class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                        data-placement="top"
+                                                        title="You don't have permission to approve" disabled>
+                                                    Approve
+                                                </button>
+                                            {% endif %}
+
                                         {% endif %}
-                                        {% else %}
+                                    {% else %}
                                         <button type="button" class="btn btn-sm btn-primary" disabled>Requested</button>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
-                            <a href="#" class="btn btn-info btn-sm btn-warning" data-toggle="modal"
+                            <a href="#" class="btn btn-sm btn-warning" data-toggle="modal"
                                data-target="#edittaskmodal">
                                 Edit
                             </a>
-                            <a href="#" class="btn btn-info btn-sm btn-danger" data-toggle="modal"
+                            <a href="#" class="btn btn-sm btn-danger" data-toggle="modal"
                                data-target="#deletetaskmodal">
                                 Delete
                             </a>
@@ -100,18 +113,27 @@
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
-                        {% for comment in comments %}
+                        {% if comments %}
+                            {% for comment in comments %}
+                                <ul class="list-group" style="margin-bottom: 10px">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span class="badge badge-primary badge-pill">{{ comment.user.first_name|upper }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>
+                                            {{ comment.details }}
+                                        </strong>
+                                    </li>
+                                </ul>
+                            {% endfor %}
+                        {% else %}
                             <ul class="list-group" style="margin-bottom: 10px">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span class="badge badge-primary badge-pill">{{ comment.user.first_name|upper }}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>
-                                        {{ comment.details }}
-                                    </strong>
+                                    <span class="badge badge-warning badge-pill">NO COMMENTS FOUND</span>
                                 </li>
                             </ul>
-                        {% endfor %}
+
+                        {% endif %}
                     </div>
                 </div>
                 {% if comments.has_other_pages %}
@@ -156,94 +178,161 @@
     </div>
 
     {#    Edit Modal start ============#}
-    <div class="modal fade" id="edittaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel">Edit {{ data.task_name }}</h6>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="exampleFormControlSelect1">Task Status</label>
-                            <select class="form-control" name="status" id="exampleFormControlSelect1">
-                                <option value="{{ data.status }}" selected>{{ data.get_status_display }}</option>
-                                <option value="complete">Complete</option>
-                                <option value="incomplete">Incomplete</option>
-                                <option value="outstanding">Outstanding</option>
-                                <option value="no_status">No Status</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Additional Info</label>
-                            <textarea class="form-control" name="additional" id="exampleFormControlTextarea1"
-                                      rows="3">{{ data.additional_info }}</textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update</button>
-                        </div>
-                    </form>
+    {% if perms.task_manager.change_task %}
+        <div class="modal fade" id="edittaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="exampleModalLabel">Edit {{ data.task_name }}</h6>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Task Status</label>
+                                <select class="form-control" name="status" id="exampleFormControlSelect1">
+                                    <option value="{{ data.status }}" selected>{{ data.get_status_display }}</option>
+                                    <option value="complete">Complete</option>
+                                    <option value="incomplete">Incomplete</option>
+                                    <option value="outstanding">Outstanding</option>
+                                    <option value="no_status">No Status</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Additional Info</label>
+                                <textarea class="form-control" name="additional" id="exampleFormControlTextarea1"
+                                          rows="3">{{ data.additional_info }}</textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="modal fade" id="edittaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="exampleModalLabel">Edit {{ data.task_name }}</h6>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 style="color: red; font-weight: bold">You Don't Have Permission to Edit</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     {#    Edit Modal end ===========#}
 
     {#    Delete modal#}
-    <div class="modal fade" id="deletetaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Delete" below if you are ready to delete the task permanently.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-danger" href="{% url 'delete-task' data.id %}">Delete</a>
+    {% if perms.task_manager.delete_task %}
+        <div class="modal fade" id="deletetaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Delete" below if you are ready to delete the task permanently.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-danger" href="{% url 'delete-task' data.id %}">Delete</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="modal fade" id="deletetaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="exampleModalLabel">Delete {{ data.task_name }}</h6>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 style="color: red; font-weight: bold">You Don't Have Permission to Delete This</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {#    Delete Modal end =================#}
 
     {#    Comment Modal start ================#}
-    <div class="modal fade" id="addcommentmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel">Add comment on {{ data.task_name }}</h6>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="{% url 'add-comment' data.id %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Your Comment</label>
-                            <textarea class="form-control" name="comment" id="exampleFormControlTextarea1"
-                                      rows="3"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
+    {% if perms.task_manager.add_comment %}
+        <div class="modal fade" id="addcommentmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="exampleModalLabel">Add comment on {{ data.task_name }}</h6>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'add-comment' data.id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Your Comment</label>
+                                <textarea class="form-control" name="comment" id="exampleFormControlTextarea1"
+                                          rows="3"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="modal fade" id="addcommentmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="exampleModalLabel">Comment on {{ data.task_name }}</h6>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 style="color: red; font-weight: bold">You Don't Have Permission for to add comments</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {#    Comment modal End =======================#}
 {% endblock %}
 {% block js %}

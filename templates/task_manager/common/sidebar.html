@@ -44,45 +44,68 @@
 <!-- End of Sidebar -->
 
 {#    Create Task Modal start ============#}
-<div class="modal fade" id="addtaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="exampleModalLabel">Add New Task</h6>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="{% url 'add-task' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Task Name</label>
-                        <input class="form-control" type="text" name="name"
-                               aria-label="default input example">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Select Task Status</label>
-                        <select class="form-control" name="status" id="exampleFormControlSelect1">
-                            <option value="complete">Complete</option>
-                            <option value="incomplete">Incomplete</option>
-                            <option value="outstanding">Outstanding</option>
-                            <option value="no_status">No Status</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Additional Info</label>
-                        <textarea class="form-control" name="additional" id="exampleFormControlTextarea1"
-                                  rows="3"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
+{% if perms.task_manager.add_task %}
+    <div class="modal fade" id="addtaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel">Add New Task</h6>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'add-task' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Task Name</label>
+                            <input class="form-control" type="text" name="name"
+                                   aria-label="default input example">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Select Task Status</label>
+                            <select class="form-control" name="status" id="exampleFormControlSelect1">
+                                <option value="complete">Complete</option>
+                                <option value="incomplete">Incomplete</option>
+                                <option value="outstanding">Outstanding</option>
+                                <option value="no_status">No Status</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Additional Info</label>
+                            <textarea class="form-control" name="additional" id="exampleFormControlTextarea1"
+                                      rows="3"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    {% else %}
+    <div class="modal fade" id="addtaskmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="exampleModalLabel">Add New Task</h6>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 style="color: red; font-weight: bold">You Don't Have Permission to Add Task</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endif %}
+
 {#    Create Taks Modal end ===========#}

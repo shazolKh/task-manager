@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from .models import *
 from datetime import datetime
 from django.contrib import messages
+from django.db.models import Q
 
 
 # Create your views here.
@@ -12,6 +13,14 @@ from django.contrib import messages
 @login_required(login_url='login')
 def Dashboard(request):
     task_list = Task.objects.order_by('-id').all()
+    # Total Tasks
+    total_tasks = Task.objects.all().count()
+    completed = Task.objects.filter(status='complete').count()
+
+    percentage = (completed * 100) / total_tasks
+
+    pending = ApprovalRequest.objects.all().count()
+
     page = request.GET.get('page', 1)
     paginator = Paginator(task_list, 8)
 
@@ -24,6 +33,10 @@ def Dashboard(request):
 
     context = {
         'tasks': tasks,
+        'total_task': total_tasks,
+        'complete': completed,
+        'per': percentage,
+        'pending': pending
     }
     return render(request, 'task_manager/dashboard.html', context)
 
@@ -122,7 +135,7 @@ def AddTask(request):
 def Summary(request):
     task_list = Task.objects.order_by('-id').all()
     page = request.GET.get('page', 1)
-    paginator = Paginator(task_list, 20)
+    paginator = Paginator(task_list, 15)
 
     try:
         tasks = paginator.page(page)
@@ -137,6 +150,26 @@ def Summary(request):
     return render(request, 'task_manager/summary.html', context)
 
 
-def Additional(request, pk):
-    print(pk)
-    return JsonResponse({'data': pk})
+@login_required(login_url='login')
+def Search(request):
+    query = request.GET['query']
+
+    task_list = Task.objects.filter(Q(task_name__contains=query) | Q(status__contains=query) |
+                                    Q(updated_by__username__contains=query) |
+                                    Q(updated_by__first_name__contains=query))
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(task_list, 8)
+
+    try:
+        tasks = paginator.page(page)
+    except PageNotAnInteger:
+        tasks = paginator.page(1)
+    except EmptyPage:
+        tasks = paginator.page(paginator.num_pages)
+
+    context = {
+        'tasks': tasks,
+    }
+
+    return render(request, 'task_manager/search.html', context)
