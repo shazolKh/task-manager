@@ -147,7 +147,7 @@ def Search(request):
                                     Q(updated_by__first_name__contains=query))
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(task_list, 8)
+    paginator = Paginator(task_list, 9)
 
     try:
         tasks = paginator.page(page)
@@ -175,7 +175,7 @@ def MainDashboard(request):
     pending = ApprovalRequest.objects.all().count()
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(task_list, 8)
+    paginator = Paginator(task_list, 9)
 
     try:
         tasks = paginator.page(page)
