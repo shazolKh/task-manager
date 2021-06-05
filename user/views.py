@@ -9,14 +9,14 @@ from django.contrib.auth.decorators import login_required
 
 def Index(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('main-dashboard')
     else:
         return render(request, 'index.html')
 
 
 def Login(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('main-dashboard')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -25,7 +25,7 @@ def Login(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('dashboard')
+                return redirect('main-dashboard')
             else:
                 messages.warning(request, 'Invalid Username or Password!!!')
 
@@ -34,7 +34,7 @@ def Login(request):
 
 def Register(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('main-dashboard')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -51,7 +51,7 @@ def Register(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('dashboard')
+                return redirect('main-dashboard')
 
     return render(request, 'user/register.html')
 
