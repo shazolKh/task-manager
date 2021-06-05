@@ -192,6 +192,7 @@ def MainDashboard(request):
     midnight = mid - timedelta(minutes=1)
     if now > midnight:
         Task.objects.update(status='no status')
+        ApprovalRequest.objects.filter(approved=False).delete()
 
     context = {
         'tasks': tasks,
