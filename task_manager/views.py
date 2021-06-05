@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from .models import *
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from django.contrib import messages
 from django.db.models import Q
 
@@ -13,14 +13,6 @@ from django.db.models import Q
 @login_required(login_url='login')
 def Dashboard(request):
     task_list = Task.objects.order_by('-id').all()
-    # Total Tasks
-    total_tasks = Task.objects.all().count()
-    completed = Task.objects.filter(status='complete').count()
-
-    percentage = (completed * 100) / total_tasks
-
-    pending = ApprovalRequest.objects.all().count()
-
     page = request.GET.get('page', 1)
     paginator = Paginator(task_list, 8)
 
@@ -33,10 +25,6 @@ def Dashboard(request):
 
     context = {
         'tasks': tasks,
-        'total_task': total_tasks,
-        'complete': completed,
-        'per': percentage,
-        'pending': pending
     }
     return render(request, 'task_manager/dashboard.html', context)
 
@@ -173,3 +161,43 @@ def Search(request):
     }
 
     return render(request, 'task_manager/search.html', context)
+
+
+@login_required(login_url='login')
+def MainDashboard(request):
+    task_list = Task.objects.order_by('-id').all()
+    # Total Tasks
+    total_tasks = Task.objects.all().count()
+    completed = Task.objects.filter(status='complete').count()
+
+    percentage = (completed * 100) / total_tasks
+
+    pending = ApprovalRequest.objects.all().count()
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(task_list, 8)
+
+    try:
+        tasks = paginator.page(page)
+    except PageNotAnInteger:
+        tasks = paginator.page(1)
+    except EmptyPage:
+        tasks = paginator.page(paginator.num_pages)
+
+    # set status to 'No Status' at midnight
+    today = date.today()
+    mid = datetime.combine(today, datetime.min.time())
+    now = datetime.now().replace(microsecond=0)
+
+    midnight = mid - timedelta(minutes=1)
+    if now > midnight:
+        Task.objects.update(status='no status')
+
+    context = {
+        'tasks': tasks,
+        'total_task': total_tasks,
+        'complete': completed,
+        'per': percentage,
+        'pending': pending
+    }
+    return render(request, 'task_manager/mainDashboard.html', context)

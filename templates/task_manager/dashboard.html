@@ -1,94 +1,18 @@
 {% extends 'task_manager/common/dashboard_base.html' %}
 
+{% block titla %}
+   <title>Task Manager | Manager</title>
+{% endblock %}
+
 {% block dasboard_content %}
     <div class="container-fluid">
         <!-- Content Row -->
         {% if perms.task_manager.view_task %}
-            <div class="row">
-                <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Total Tasks (Added)
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_task }}</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        Taks Completed
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ complete }}</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-check-double fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Completion Rate
-                                    </div>
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col-auto">
-                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ per|floatformat }}%</div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="progress progress-sm mr-2">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
-                                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pending Requests Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-warning shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending
-                                        Requests
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending }}</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'main-dashboard' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Task Manager </li>
+                </ol>
             </div>
             <div class="row">
                 <!-- Area Chart -->
@@ -119,7 +43,7 @@
                                             <i class="fas fa-times-circle fa-2x" style="color: red"></i>
                                         {% elif task.status == 'outstanding' %}
                                             <i class="fas fa-exclamation-triangle fa-2x" style="color: yellow"></i>
-                                        {% elif task.status == 'no_status' %}
+                                        {% elif task.status == 'no status' %}
                                             <i class="fas fa-power-off fa-2x"></i>
                                         {% elif task.status == 'pending' %}
                                             <i class="far fa-clock fa-2x" style="color: #4f1915"></i>

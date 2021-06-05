@@ -1,12 +1,16 @@
 {% extends 'task_manager/common/dashboard_base.html' %}
 
+{% block titla %}
+   <title>Task Manager | {{ data.task_name }}</title>
+{% endblock %}
+
 {% block dasboard_content %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-10 col-lg-10">
                 <div>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'main-dashboard' %}">Home</a></li>
                         <li class="breadcrumb-item active">{{ data.task_name|title }}</li>
                     </ol>
                 </div>
@@ -65,7 +69,7 @@
                                     <i class="fas fa-times-circle fa-2x" style="color: red"></i>
                                 {% elif data.status == 'outstanding' %}
                                     <i class="fas fa-exclamation-triangle fa-2x" style="color: yellow"></i>
-                                {% elif data.status == 'no_status' %}
+                                {% elif data.status == 'no status' %}
                                     <i class="fas fa-power-off fa-2x"></i>
                                 {% elif data.status == 'pending' %}
                                     <i class="far fa-clock fa-2x" style="color: #4f1915"></i>
@@ -199,7 +203,7 @@
                                     <option value="complete">Complete</option>
                                     <option value="incomplete">Incomplete</option>
                                     <option value="outstanding">Outstanding</option>
-                                    <option value="no_status">No Status</option>
+                                    <option value="no status">No Status</option>
                                 </select>
                             </div>
                             <div class="form-group">

@@ -1,11 +1,16 @@
 {% extends 'task_manager/common/dashboard_base.html' %}
 {% load static %}
+
+{% block titla %}
+   <title>Task Manager | Summary</title>
+{% endblock %}
+
 {% block dasboard_content %}
     <div class="container-fluid">
         {% if perms.task_manager.view_task %}
             <div>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'main-dashboard' %}">Home</a></li>
                     <li class="breadcrumb-item active">Task Summary</li>
                 </ol>
             </div>

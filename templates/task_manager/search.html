@@ -1,19 +1,23 @@
 {% extends 'task_manager/common/dashboard_base.html' %}
 
+{% block titla %}
+   <title>Task Manager | Search Results</title>
+{% endblock %}
+
 {% block dasboard_content %}
     <div class="container-fluid">
         <!-- Content Row -->
         {% if perms.task_manager.view_task %}
             <div>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
-                    <li class="breadcrumb-item active">Search Result(s)</li>
+                    <li class="breadcrumb-item"><a href="{% url 'main-dashboard' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Search Result(s) </li>
                 </ol>
             </div>
             <div class="row">
                 <!-- Area Chart -->
                 {% for task in tasks %}
-                    <div class="col-xl-6 col-lg-6">
+                    <div class="col-xl-4 col-lg-4">
                         <div class="card border-left-info shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -21,7 +25,7 @@
                                     <h6 class="m-0 font-weight-bold text-primary">{{ task.task_name|title }}</h6>
                                 </a>
                                 <div class="dropdown no-arrow">
-                                    <a href="#" class="btn btn-info btn-circle" data-toggle="modal"
+                                    <a href="#" class="btn btn-info btn-circle btn-sm" data-toggle="modal"
                                        data-target="#addcommentmodal{{ task.id }}">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
@@ -31,27 +35,14 @@
                             <div class="card-body">
                                 <ul class="list-group">
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Status <span
-                                            class="badge badge-primary badge-pill">{{ task.get_status_display|upper }}</span>
-                                        {% if task.status == 'complete' %}
-                                            <i class="fas fa-check-circle fa-2x" style="color: green"></i>
-                                        {% elif task.status == 'incomplete' %}
-                                            <i class="fas fa-times-circle fa-2x" style="color: red"></i>
-                                        {% elif task.status == 'outstanding' %}
-                                            <i class="fas fa-exclamation-triangle fa-2x" style="color: yellow"></i>
-                                        {% elif task.status == 'no_status' %}
-                                            <i class="fas fa-power-off fa-2x"></i>
-                                        {% elif task.status == 'pending' %}
-                                            <i class="far fa-clock fa-2x" style="color: #4f1915"></i>
-                                        {% endif %}
+                                        Status
+                                        <span class="badge badge-primary badge-pill">
+                                            {{ task.get_status_display|upper }}
+                                        </span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         Updated by
                                         <span class="badge badge-primary badge-pill">{{ task.updated_by|upper }}</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Updated at
-                                        <span class="badge badge-primary badge-pill">{{ task.updated_at }}</span>
                                     </li>
                                 </ul>
                             </div>

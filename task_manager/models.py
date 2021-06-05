@@ -11,7 +11,7 @@ class Task(models.Model):
         ('complete', 'Complete'),
         ('incomplete', 'Incomplete'),
         ('outstanding', 'Outstanding'),
-        ('no_status', 'No Status'),
+        ('no status', 'No Status'),
         ('pending', 'Pending'),
     )
     status = models.CharField(max_length=255, choices=STATUS_TYPE, null=True, blank=True)

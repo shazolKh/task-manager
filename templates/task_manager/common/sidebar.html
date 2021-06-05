@@ -1,5 +1,5 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'dashboard' %}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'main-dashboard' %}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -11,7 +11,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="{% url 'dashboard' %}">
+        <a class="nav-link" href="{% url 'main-dashboard' %}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -20,16 +20,24 @@
         Interface
     </div>
     <li class="nav-item">
+        <a class="nav-link" href="{% url 'dashboard' %}">
+            <i class="fas fa-fw fa-cogs"></i>
+            <span>Task Manager</span>
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="modal"
            data-target="#addtaskmodal">
             <i class="fas fa-fw fa-plus"></i>
-            <span>Add New Task</span></a>
+            <span>Add New Task</span>
+        </a>
     </li>
 
     <li class="nav-item">
         <a class="nav-link" href="{% url 'summary' %}">
             <i class="fas fa-fw fa-book-open"></i>
-            <span>Summary</span></a>
+            <span>Summary</span>
+        </a>
     </li>
 
     <!-- Divider -->
@@ -69,7 +77,7 @@
                                 <option value="complete">Complete</option>
                                 <option value="incomplete">Incomplete</option>
                                 <option value="outstanding">Outstanding</option>
-                                <option value="no_status">No Status</option>
+                                <option value="no status">No Status</option>
                             </select>
                         </div>
                         <div class="form-group">
