@@ -185,14 +185,15 @@ def MainDashboard(request):
         tasks = paginator.page(paginator.num_pages)
 
     # set status to 'No Status' at midnight
-    today = date.today()
+    '''today = date.today()
     mid = datetime.combine(today, datetime.min.time())
-    now = datetime.now().replace(microsecond=0)
+    now = datetime.now().time().replace(microsecond=0)
 
     midnight = mid - timedelta(minutes=1)
+    midnight = midnight.time()
     if now > midnight:
         Task.objects.update(status='no status')
-        ApprovalRequest.objects.filter(approved=False).delete()
+        ApprovalRequest.objects.filter(approved=False).delete()'''
 
     context = {
         'tasks': tasks,
