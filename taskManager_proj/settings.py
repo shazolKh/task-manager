@@ -85,7 +85,7 @@ DATABASES = {
 }
 
 CRONJOBS = [
-    ('*/1 * * * *', 'task_manager.cron.my_scheduled_job')
+    ('0 0 * * *', 'task_manager.cron.my_scheduled_job')
 ]
 
 # Password validation
