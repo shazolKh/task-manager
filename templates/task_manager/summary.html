@@ -40,43 +40,6 @@
                             </tbody>
                         </table>
                     </div>
-                    {% if tasks.has_other_pages %}
-                        <nav style="float: right">
-                            <ul class="pagination">
-                                {% if tasks.has_previous %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ tasks.previous_page_number }}"
-                                           tabindex="-1">Previous</a>
-                                    </li>
-                                {% else %}
-                                    <li class="page-item disabled">
-                                        <span class="page-link" tabindex="-1">Previous</span>
-                                    </li>
-                                {% endif %}
-                                {% for i in tasks.paginator.page_range %}
-                                    {% if tasks.number == i %}
-                                        <li class="page-item active">
-                                            <span class="page-link">{{ i }} <span
-                                                    class="sr-only">(current)</span></span>
-                                        </li>
-                                    {% else %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if tasks.has_next %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ tasks.next_page_number }}">Next</a>
-                                    </li>
-                                {% else %}
-                                    <li class="page-item disabled">
-                                        <span class="page-link">Next</span>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    {% endif %}
                 </div>
             </div>
         {% else %}
@@ -113,9 +76,9 @@
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["pdf"],
-                "paging": false,
+                "paging": true,
                 "ordering": false,
-                "info": false
+                "info": true
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>

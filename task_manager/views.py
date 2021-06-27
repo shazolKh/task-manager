@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from .models import *
-from datetime import datetime, date, timedelta
+from datetime import datetime
 from django.contrib import messages
 from django.db.models import Q
 
@@ -121,16 +121,7 @@ def AddTask(request):
 
 @login_required(login_url='login')
 def Summary(request):
-    task_list = Task.objects.order_by('-id').all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(task_list, 15)
-
-    try:
-        tasks = paginator.page(page)
-    except PageNotAnInteger:
-        tasks = paginator.page(1)
-    except EmptyPage:
-        tasks = paginator.page(paginator.num_pages)
+    tasks = Task.objects.order_by('-id').all()
 
     context = {
         'tasks': tasks,

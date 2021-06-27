@@ -3,3 +3,4 @@ venv
 hhhhh.py
 taskManager_proj.zip
 __pycache__
+db.sqlite3
