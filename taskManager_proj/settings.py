@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django_crontab'
+    # 'django_crontab'
 
     'user.apps.UserConfig',
     'task_manager.apps.TaskManagerConfig',
@@ -85,9 +85,9 @@ DATABASES = {
     }
 }
 
-CRONJOBS = [
-    ('0 0 * * *', 'task_manager.cron.my_scheduled_job')
-]
+#CRONJOBS = [
+#    ('0 0 * * *', 'task_manager.cron.my_scheduled_job')
+#]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
